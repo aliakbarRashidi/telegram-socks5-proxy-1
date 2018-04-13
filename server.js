@@ -3,8 +3,10 @@
 */
 
 const argv = require("optimist")
-            .usage("Usage: $0 --port [listen port]")
+            .usage("Usage: $0 --port [listen port] $1 --user [proxy user] $0 --pass [proxy password]")
             .demand(["port"])
+			.demand(["user"])
+			.demand(["pass"])
             .argv;
 			
 const socks5 = require("./lib");
@@ -14,7 +16,7 @@ const telegarm = require("./telegram");
 var options = {
 	authenticate : function (username, password, callback) 
 	{
-		if (username === 'sock' && password === 'qwe123') 
+		if (username === argv.user && password === argv.pass) 
 		{
 			return setImmediate(callback);
 		}
@@ -64,3 +66,4 @@ function isIP(str)
 
 server.listen(argv.port);
 console.log(`INFO: started listen port at ${argv.port}`);
+console.log(`INFO: User is "${argv.user}" with password "${argv.pass}"`);
